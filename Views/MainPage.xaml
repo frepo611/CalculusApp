@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CalculusApp.MainPage"
+             xmlns:viewModels="clr-namespace:CalculusApp.ViewModels"
+             x:DataType="viewModels:MainPageViewModel">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+
+            <Label
+                Text="Calculate!"
+                Style="{StaticResource Headline}"
+            ></Label>
+            <Label
+                Text= "{Binding MyProperty}"
+                Style="{StaticResource SubHeadline}"
+            ></Label>
+            <Entry x:Name="FirstTextField"
+                   Placeholder="Do it"
+                >
+            </Entry>
+            <Label x:Name="FirstResult"
+                    Text="Result Here">
+            </Label>
+            <Button
+                x:Name="CounterBtn"
+                Text="Hit me" 
+                HorizontalOptions="Fill"
+                Clicked="OnNewtonClicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
