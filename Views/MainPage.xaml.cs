@@ -13,8 +13,8 @@ public partial class MainPage : ContentPage
         BindingContext = _mainPageViewModel;
     }
 
-    private void OnNewtonClicked(object sender, EventArgs e)
+    private async void OnNewtonClicked(object sender, EventArgs e)
     {
-        
+        _mainPageViewModel.Solution = await _mainPageViewModel.GetSolutionAsync();
     }
 }
