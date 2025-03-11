@@ -1,5 +1,6 @@
 ﻿using CalculusApp.ViewModels;
 using Microsoft.Extensions.Logging;
+
 namespace CalculusApp;
 
 public static class MauiProgram

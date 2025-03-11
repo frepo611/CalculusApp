@@ -9,6 +9,24 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
+            <HorizontalStackLayout>
+                <RadioButton x:Name="Derive"
+                             Content="Derive"
+                  IsChecked="True"
+                  GroupName="OperatorType" />
+                <RadioButton x:Name= "Integrate"
+                             Content="Integrate"
+                             IsChecked= "False"
+                             GroupName="OperatorType" />
+                <RadioButton x:Name="Factor"
+                             Content="Factor"
+                    IsChecked="False"
+                    GroupName="OperatorType" />
+                <RadioButton x:Name="Simplify"
+                             Content="Simplify"
+                    IsChecked="False"
+                  GroupName="OperatorType" />
+            </HorizontalStackLayout>
             <Label
                 Text="Calculate!"
                 Style="{StaticResource Headline}">
@@ -18,7 +36,8 @@
                 Style="{StaticResource SubHeadline}">
             </Label>
             <Entry x:Name="FirstTextField"
-                   Placeholder="Do it">
+                   Placeholder="Expression here"
+                   Text="{Binding Expression}">
             </Entry>
             <Label x:Name="FirstResult"
                     Text="{Binding Solution}">

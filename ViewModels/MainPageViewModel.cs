@@ -9,7 +9,9 @@ public partial class MainPageViewModel : ObservableObject
     public int MyProperty { get; set; }
 
     [ObservableProperty] 
-    private string _solution = "";
+    private string _solution = "The answer";
+
+    public string Expression { get; set; }
 
     private readonly SolutionService _solutionService;
 
@@ -26,6 +28,6 @@ public partial class MainPageViewModel : ObservableObject
 
     public async Task<string> GetSolutionAsync()
     {
-        return await _solutionService.GetSolutionAsync("derive","x^2");
+        return await _solutionService.GetSolutionAsync("derive",Expression);
     }
 }
