@@ -12,27 +12,27 @@
             <HorizontalStackLayout>
                 <RadioButton x:Name="Derive"
                              Content="Derive"
-                  IsChecked="True"
-                  GroupName="OperatorType" />
-                <RadioButton x:Name= "Integrate"
+                             IsChecked="{Binding IsDeriveChecked}"
+                             GroupName="OperatorType" />
+                <RadioButton x:Name="Integrate"
                              Content="Integrate"
-                             IsChecked= "False"
+                             IsChecked="{Binding IsIntegrateChecked}"
                              GroupName="OperatorType" />
                 <RadioButton x:Name="Factor"
                              Content="Factor"
-                    IsChecked="False"
-                    GroupName="OperatorType" />
+                             IsChecked="{Binding IsFactorChecked}"
+                             GroupName="OperatorType" />
                 <RadioButton x:Name="Simplify"
                              Content="Simplify"
-                    IsChecked="False"
-                  GroupName="OperatorType" />
+                             IsChecked="{Binding IsSimplifyChecked}"
+                             GroupName="OperatorType" />
             </HorizontalStackLayout>
             <Label
                 Text="Calculate!"
                 Style="{StaticResource Headline}">
             </Label>
             <Label
-                Text= "Hint: Be good!"
+                Text="Hint: Be good!"
                 Style="{StaticResource SubHeadline}">
             </Label>
             <Entry x:Name="FirstTextField"
@@ -40,7 +40,7 @@
                    Text="{Binding Expression}">
             </Entry>
             <Label x:Name="FirstResult"
-                    Text="{Binding Solution}">
+                   Text="{Binding Solution}">
             </Label>
             <Button
                 x:Name="CounterBtn"

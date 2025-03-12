@@ -8,7 +8,7 @@ public partial class MainPageViewModel : ObservableObject
 {
     public int MyProperty { get; set; }
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private string _solution = "The answer";
 
     public string Expression { get; set; }
@@ -20,6 +20,18 @@ public partial class MainPageViewModel : ObservableObject
         _solutionService = solutionService;
     }
 
+    [ObservableProperty]
+    private bool _isDeriveChecked = true;
+
+    [ObservableProperty]
+    private bool _isIntegrateChecked;
+
+    [ObservableProperty]
+    private bool _isFactorChecked;
+
+    [ObservableProperty]
+    private bool _isSimplifyChecked;
+
     [RelayCommand]
     private async Task NewtonClicked()
     {
@@ -28,6 +40,6 @@ public partial class MainPageViewModel : ObservableObject
 
     public async Task<string> GetSolutionAsync()
     {
-        return await _solutionService.GetSolutionAsync("derive",Expression);
+        return await _solutionService.GetSolutionAsync("derive", Expression);
     }
 }
