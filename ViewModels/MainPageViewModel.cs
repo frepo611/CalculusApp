@@ -70,7 +70,7 @@ public partial class MainPageViewModel : ObservableObject
                 return $"{FirstExtraField}|{expression}";
             case "area":
                 // Modify the expression for Area Under Curve operation
-                return $"area({expression})";
+                return $"{FirstExtraField}:{SecondExtraField}|{expression}";
             default:
                 // Return the original expression for other operations
                 return expression;
