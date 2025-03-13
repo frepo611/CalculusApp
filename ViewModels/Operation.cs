@@ -1,5 +1,5 @@
 public class Operation
 {
-    public string Name { get; set; }
-    public string Endpoint { get; set; }
+    public required string Name { get; set; }
+    public required string Endpoint { get; set; }
 }

@@ -1,4 +1,4 @@
-namespace CalculusApp;
+﻿namespace CalculusApp.Models;
 public static class Operations
 {
     public static readonly Operation Derive = new Operation { Name = "Derive", Endpoint = "derive" };

@@ -4,6 +4,7 @@
              x:Class="CalculusApp.MainPage"
              xmlns:viewModels="clr-namespace:CalculusApp.ViewModels"
              x:DataType="viewModels:MainPageViewModel">
+
     <ScrollView>
         <VerticalStackLayout
             Padding="30,0"
@@ -15,30 +16,24 @@
                 ItemDisplayBinding="{Binding Name}"
                 SelectedItem="{Binding SelectedOperation}" />
             <Label
-                Text="Analysera mera!"
+                Text="Calculate!"
                 Style="{StaticResource Headline}">
             </Label>
             <Label
-                Text="Ledning: Be good!"
+                Text="Hint: Be good!"
                 Style="{StaticResource SubHeadline}">
             </Label>
             <Entry x:Name="FirstTextField"
                    Placeholder="Expression here"
-                   HorizontalOptions="Center"
-                   FontSize="14">
-            </Entry>
-            <Entry x:Name="{Binding FirstExtraField}"
-                   IsVisible="{Binding IsFirstExtraFieldVisible}"
-                   HorizontalOptions="Center">
+                   Text="{Binding Expression}">
             </Entry>
             <Label x:Name="FirstResult"
-                   Style="{StaticResource SubHeadline}"
                    Text="{Binding Solution}">
             </Label>
             <Button
                 x:Name="CounterBtn"
-                Text="{Binding SelectedOperation.Name}" 
-                HorizontalOptions="Center"
+                Text="Hit me" 
+                HorizontalOptions="Fill"
                 Command="{Binding NewtonClickedCommand}">
             </Button>
         </VerticalStackLayout>

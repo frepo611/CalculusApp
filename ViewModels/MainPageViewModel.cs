@@ -55,7 +55,7 @@ public partial class MainPageViewModel : ObservableObject
         {
             case "tangent":
                 // Modify the expression for Find Tangent operation
-                return $"{FirstExtraField}|{expression}";
+                return $"10|{expression}";
             case "area":
                 // Modify the expression for Area Under Curve operation
                 return $"area({expression})";
