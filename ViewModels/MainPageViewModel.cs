@@ -9,7 +9,9 @@ public partial class MainPageViewModel : ObservableObject
 {
     [ObservableProperty]
     private string _solution = "";
-    public string Expression { get; set; }
+    public string? FirstExtraField { get; set;}
+    public string? SecondExtraField { get; set; }
+    public string? Expression { get; set; }
 
     private readonly SolutionService _solutionService;
 
@@ -21,6 +23,9 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     private bool _isFirstExtraFieldVisible;
 
+    [ObservableProperty]
+    private bool _isSecondExtraFieldVisible;
+
     public MainPageViewModel(SolutionService solutionService)
     {
         _solutionService = solutionService;
@@ -30,6 +35,13 @@ public partial class MainPageViewModel : ObservableObject
     partial void OnSelectedOperationChanged(Operation value)
     {
         UpdateFirstExtraFieldVisible();
+        UpdateSecondExtraFieldVisible();
+
+    }
+
+    private void UpdateSecondExtraFieldVisible()
+    {
+        IsSecondExtraFieldVisible = SelectedOperation.Name == "Area Under Curve";
     }
 
     private void UpdateFirstExtraFieldVisible()
@@ -55,7 +67,7 @@ public partial class MainPageViewModel : ObservableObject
         {
             case "tangent":
                 // Modify the expression for Find Tangent operation
-                return $"10|{expression}";
+                return $"{FirstExtraField}|{expression}";
             case "area":
                 // Modify the expression for Area Under Curve operation
                 return $"area({expression})";

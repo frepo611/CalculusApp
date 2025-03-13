@@ -10,29 +10,41 @@
             Padding="30,0"
             Spacing="25">
             <Picker
-                Title="Select Operation"
+                    Title="Select Operation"
                 HorizontalOptions="Center"
                 ItemsSource="{Binding Operations}"
                 ItemDisplayBinding="{Binding Name}"
                 SelectedItem="{Binding SelectedOperation}" />
             <Label
-                Text="Calculate!"
-                Style="{StaticResource Headline}">
+                    Text="Calculate!"
+                    Style="{StaticResource Headline}">
             </Label>
             <Label
-                Text="Hint: Be good!"
-                Style="{StaticResource SubHeadline}">
+                    Text="Hint: Be good!"
+                    Style="{StaticResource SubHeadline}">
             </Label>
-            <Entry x:Name="FirstTextField"
-                   Placeholder="Expression here"
-                   Text="{Binding Expression}">
+            <Entry  x:Name="FirstTextField"
+                    Placeholder="Expression here"
+                    Text="{Binding Expression}"
+                    HorizontalOptions="Center">
             </Entry>
-            <Label x:Name="FirstResult"
+            <Entry 
+                    Placeholder="First field"
+                    Text="{Binding FirstExtraField}"
+                    ClearButtonVisibility="WhileEditing"
+                    IsVisible="{Binding IsFirstExtraFieldVisible}">
+            </Entry>
+            <Entry  Placeholder="Second field"
+                    Text="{Binding SecondExtraField}"
+                    ClearButtonVisibility="WhileEditing"
+                    IsVisible="{Binding IsSecondExtraFieldVisible}">
+            </Entry>
+                <Label x:Name="FirstResult"
                    Text="{Binding Solution}">
             </Label>
             <Button
                 x:Name="CounterBtn"
-                Text="Hit me" 
+                Text="{Binding SelectedOperation.Name}" 
                 HorizontalOptions="Fill"
                 Command="{Binding NewtonClickedCommand}">
             </Button>
