@@ -20,8 +20,8 @@
                     Style="{StaticResource Headline}">
             </Label>
             <Label
-                    Text="Hint: Be good!"
-                    Style="{StaticResource SubHeadline}">
+                Text="Ledning: Be good!"
+                Style="{StaticResource SubHeadline}">
             </Label>
             <Entry  x:Name="FirstTextField"
                     Placeholder="Expression here"
@@ -46,6 +46,8 @@
                 x:Name="CounterBtn"
                 Text="{Binding SelectedOperation.Name}" 
                 HorizontalOptions="Fill"
+                Text="{Binding SelectedOperation.Name}" 
+                HorizontalOptions="Center"
                 Command="{Binding NewtonClickedCommand}">
             </Button>
             <Label Text="Enter a LaTeX Expression:" FontSize="20"/>

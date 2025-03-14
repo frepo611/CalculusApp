@@ -19,10 +19,10 @@ public partial class MainPageViewModel : ObservableObject
     public ObservableCollection<Operation> Operations { get; } = new ObservableCollection<Operation>(Models.Operations.GetAllOperations());
 
     [ObservableProperty]
-    private Operation _selectedOperation;
+    private bool _isDeriveChecked = true;
 
     [ObservableProperty]
-    private bool _isFirstExtraFieldVisible;
+    private bool _isIntegrateChecked;
 
     [ObservableProperty]
     private bool _isSecondExtraFieldVisible;
