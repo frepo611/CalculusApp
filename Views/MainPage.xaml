@@ -9,45 +9,57 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <HorizontalStackLayout>
-                <RadioButton x:Name="Derive"
-                             Content="Derive"
-                             IsChecked="{Binding IsDeriveChecked}"
-                             GroupName="OperatorType" />
-                <RadioButton x:Name="Integrate"
-                             Content="Integrate"
-                             IsChecked="{Binding IsIntegrateChecked}"
-                             GroupName="OperatorType" />
-                <RadioButton x:Name="Factor"
-                             Content="Factor"
-                             IsChecked="{Binding IsFactorChecked}"
-                             GroupName="OperatorType" />
-                <RadioButton x:Name="Simplify"
-                             Content="Simplify"
-                             IsChecked="{Binding IsSimplifyChecked}"
-                             GroupName="OperatorType" />
-            </HorizontalStackLayout>
+            <Picker
+                    Title="Select Operation"
+                HorizontalOptions="Center"
+                ItemsSource="{Binding Operations}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedOperation}" />
             <Label
-                Text="Calculate!"
-                Style="{StaticResource Headline}">
+                    Text="Calculate!"
+                    Style="{StaticResource Headline}">
             </Label>
             <Label
-                Text="Hint: Be good!"
+                Text="Ledning: Be good!"
                 Style="{StaticResource SubHeadline}">
             </Label>
-            <Entry x:Name="FirstTextField"
-                   Placeholder="Expression here"
-                   Text="{Binding Expression}">
+            <Entry  x:Name="FirstTextField"
+                    Placeholder="Expression here"
+                    Text="{Binding Expression}"
+                    HorizontalOptions="Center">
+            </Entry>
+            <Entry 
+                    Placeholder="First field"
+                    Text="{Binding FirstExtraField}"
+                    ClearButtonVisibility="WhileEditing"
+                    IsVisible="{Binding IsFirstExtraFieldVisible}">
+            </Entry>
+            <Entry  Placeholder="Second field"
+                    Text="{Binding SecondExtraField}"
+                    ClearButtonVisibility="WhileEditing"
+                    IsVisible="{Binding IsSecondExtraFieldVisible}">
             </Entry>
             <Label x:Name="FirstResult"
+                   Style="{StaticResource SubHeadline}"
+                   Style="{StaticResource SubHeadline}"
                    Text="{Binding Solution}">
             </Label>
-            <Button
-                x:Name="CounterBtn"
-                Text="Hit me" 
+                Text="{Binding SelectedOperation.Name}" 
                 HorizontalOptions="Fill"
+                Text="{Binding SelectedOperation.Name}" 
+                HorizontalOptions="Center"
                 Command="{Binding NewtonClickedCommand}">
             </Button>
+            <Label Text="Enter a LaTeX Expression:" FontSize="20"/>
+
+            <Entry Text="{Binding LatexExpression, Mode=TwoWay}"
+               Placeholder="e.g., E = mc^2" />
+
+            <WebView x:Name="MathWebView"
+                 Source="{Binding LatexExpression, Converter={StaticResource LatexToHtmlConverter}}"
+                 HeightRequest="200"
+                 WidthRequest="400"
+                 BackgroundColor="White"/>
         </VerticalStackLayout>
     </ScrollView>
 
