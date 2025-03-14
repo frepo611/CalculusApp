@@ -27,6 +27,12 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSecondExtraFieldVisible;
 
+    [ObservableProperty]
+    private bool _isFirstExtraFieldVisible;
+
+    [ObservableProperty]
+    private Operation _selectedOperation;
+
     // The LaTeX expression bound to the UI
     [ObservableProperty]
     private string latexExpression;
