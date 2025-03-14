@@ -48,6 +48,16 @@
                 HorizontalOptions="Fill"
                 Command="{Binding NewtonClickedCommand}">
             </Button>
+            <Label Text="Enter a LaTeX Expression:" FontSize="20"/>
+
+            <Entry Text="{Binding LatexExpression, Mode=TwoWay}"
+               Placeholder="e.g., E = mc^2" />
+
+            <WebView x:Name="MathWebView"
+                 Source="{Binding LatexExpression, Converter={StaticResource LatexToHtmlConverter}}"
+                 HeightRequest="200"
+                 WidthRequest="400"
+                 BackgroundColor="White"/>
         </VerticalStackLayout>
     </ScrollView>
 

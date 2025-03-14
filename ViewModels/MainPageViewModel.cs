@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 
 namespace CalculusApp.ViewModels;
 
@@ -26,12 +27,35 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSecondExtraFieldVisible;
 
+    // The LaTeX expression bound to the UI
+    [ObservableProperty]
+    private string latexExpression;
+
     public MainPageViewModel(SolutionService solutionService)
     {
         _solutionService = solutionService;
         _selectedOperation = Operations.First(); // Default to the first operation
+        LatexExpression = @"\sum_{i=1}^{n} i = \frac{n(n+1)}{2}";
     }
 
+    // Generates the WebView HTML content dynamically
+    public string GetHtmlContent()
+    {
+        return $@"
+            <html>
+            <head>
+                <script type='text/javascript' async src='https://polyfill.io/v3/polyfill.min.js?features=es6'></script>
+                <script type='text/javascript' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
+            </head>
+            <body>
+                <h2>Math Expression:</h2>
+                <p>\({LatexExpression}\)</p>
+                <script>
+                    MathJax.typeset();
+                </script>
+            </body>
+            </html>";
+    }
     partial void OnSelectedOperationChanged(Operation value)
     {
         UpdateFirstExtraFieldVisible();
