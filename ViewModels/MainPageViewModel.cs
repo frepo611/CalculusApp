@@ -1,67 +1,45 @@
 ﻿using CalculusApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
 
 namespace CalculusApp.ViewModels;
 
 public partial class MainPageViewModel : ObservableObject
 {
+    public int MyProperty { get; set; }
+
     [ObservableProperty]
-    private string _solution = "";
+    private string _solution = "The answer";
+
     public string Expression { get; set; }
 
     private readonly SolutionService _solutionService;
 
-    public ObservableCollection<Operation> Operations { get; } = new ObservableCollection<Operation>(CalculusApp.Operations.GetAllOperations());
-
-    [ObservableProperty]
-    private Operation _selectedOperation;
-
-    [ObservableProperty]
-    private bool _isFirstExtraFieldVisible;
-
     public MainPageViewModel(SolutionService solutionService)
     {
         _solutionService = solutionService;
-        _selectedOperation = Operations.First(); // Default to the first operation
     }
 
-    partial void OnSelectedOperationChanged(Operation value)
-    {
-        UpdateFirstExtraFieldVisible();
-    }
+    [ObservableProperty]
+    private bool _isDeriveChecked = true;
 
-    private void UpdateFirstExtraFieldVisible()
-    {
-        IsFirstExtraFieldVisible = SelectedOperation.Name == "Find Tangent" || SelectedOperation.Name == "Area Under Curve";
-    }
+    [ObservableProperty]
+    private bool _isIntegrateChecked;
+
+    [ObservableProperty]
+    private bool _isFactorChecked;
+
+    [ObservableProperty]
+    private bool _isSimplifyChecked;
 
     [RelayCommand]
     private async Task NewtonClicked()
     {
-        Solution = await GetSolutionAsync(SelectedOperation.Endpoint);
+        Solution = await GetSolutionAsync();
     }
 
-    public async Task<string> GetSolutionAsync(string operation)
+    public async Task<string> GetSolutionAsync()
     {
-        string modifiedExpression = RebuildExpression(operation, Expression);
-        return await _solutionService.GetSolutionAsync(operation, modifiedExpression);
-    }
-
-    private string RebuildExpression(string operation, string expression)
-    {
-        switch (operation)
-        {
-            case "tangent":
-                // Modify the expression for Find Tangent operation
-                return $"{FirstExtraField}|{expression}";
-            case "area":
-                // Modify the expression for Area Under Curve operation
-                return $"area({expression})";
-            default:
-                // Return the original expression for other operations
-                return expression;
-        }
+        return await _solutionService.GetSolutionAsync("derive", Expression);
     }
 }
