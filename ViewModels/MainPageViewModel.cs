@@ -34,6 +34,22 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     private string _latexExpression;
 
+    private ExpressionHistory _selectedHistoryItem;
+    public ExpressionHistory SelectedHistoryItem
+    {
+        get => _selectedHistoryItem;
+        set
+        {
+            SetProperty(ref _selectedHistoryItem, value);
+            if (value != null)
+            {
+                SelectedOperation = Operations.FirstOrDefault(op => op.Name == value.OperationName);
+                Expression = value.Expression;
+                Solution = value.Solution;
+            }
+        }
+    }
+
     public MainPageViewModel(SolutionService solutionService, DatabaseService databaseService)
     {
         _solutionService = solutionService;
@@ -72,6 +88,7 @@ public partial class MainPageViewModel : ObservableObject
         };
         await _databaseService.AddExpressionHistoryAsync(history);
         ExpressionHistory.Add(history);
+        SelectedHistoryItem = history;
     }
 
     private async void LoadExpressionHistory()

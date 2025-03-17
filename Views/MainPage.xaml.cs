@@ -1,6 +1,6 @@
 ﻿using CalculusApp.ViewModels;
 
-namespace CalculusApp;
+namespace CalculusApp.Views;
 
 public partial class MainPage : ContentPage
 {

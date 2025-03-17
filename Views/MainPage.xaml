@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CalculusApp.MainPage"
+             x:Class="CalculusApp.Views.MainPage"
              xmlns:viewModels="clr-namespace:CalculusApp.ViewModels"
              xmlns:models="clr-namespace:CalculusApp.Models"
              x:DataType="viewModels:MainPageViewModel">
@@ -11,65 +11,83 @@
             Padding="30,0"
             Spacing="25">
             <Picker
-                    Title="Select Operation"
+                Title="Select Operation"
                 HorizontalOptions="Center"
                 ItemsSource="{Binding Operations}"
                 ItemDisplayBinding="{Binding Name}"
                 SelectedItem="{Binding SelectedOperation}" />
             <Label
-                    Text="Calculate!"
-                    Style="{StaticResource Headline}">
+                Text="Calculate!"
+                Style="{StaticResource Headline}">
             </Label>
             <Label
                 Text="Ledning: Be good!"
                 Style="{StaticResource SubHeadline}">
             </Label>
-            <Entry  x:Name="FirstTextField"
-                    Placeholder="Expression here"
-                    Text="{Binding Expression}"
-                    HorizontalOptions="Center">
+            <Entry
+                x:Name="FirstTextField"
+                Placeholder="Expression here"
+                Text="{Binding Expression}"
+                HorizontalOptions="Center">
             </Entry>
-            <Entry 
-                    Placeholder="First field"
-                    Text="{Binding FirstExtraField}"
-                    ClearButtonVisibility="WhileEditing"
-                    IsVisible="{Binding IsFirstExtraFieldVisible}">
+            <Entry
+                Placeholder="First field"
+                Text="{Binding FirstExtraField}"
+                ClearButtonVisibility="WhileEditing"
+                IsVisible="{Binding IsFirstExtraFieldVisible}">
             </Entry>
-            <Entry  Placeholder="Second field"
-                    Text="{Binding SecondExtraField}"
-                    ClearButtonVisibility="WhileEditing"
-                    IsVisible="{Binding IsSecondExtraFieldVisible}">
+            <Entry
+                Placeholder="Second field"
+                Text="{Binding SecondExtraField}"
+                ClearButtonVisibility="WhileEditing"
+                IsVisible="{Binding IsSecondExtraFieldVisible}">
             </Entry>
-            <Label x:Name="FirstResult"
-                   Text="{Binding Solution}">
+            <Label
+                x:Name="FirstResult"
+                Text="{Binding Solution}">
             </Label>
             <Button
                 x:Name="CounterBtn"
-                Text="{Binding SelectedOperation.Name}" 
+                Text="{Binding SelectedOperation.Name}"
                 HorizontalOptions="Center"
                 Command="{Binding NewtonClickedCommand}">
             </Button>
             <Label Text="Enter a LaTeX Expression:" FontSize="20"/>
 
-            <Entry Text="{Binding LatexExpression}"
-               Placeholder="e.g., E = mc^2" />
+            <Entry
+                Text="{Binding LatexExpression}"
+                Placeholder="e.g., E = mc^2" />
 
-            <WebView x:Name="MathWebView"
-                 Source="{Binding LatexExpression, Converter={StaticResource LatexToHtmlConverter}}"
-                 HeightRequest="200"
-                 WidthRequest="400"
-                 BackgroundColor="White"/>
+            <WebView
+                x:Name="MathWebView"
+                Source="{Binding LatexExpression, Converter={StaticResource LatexToHtmlConverter}}"
+                HeightRequest="200"
+                WidthRequest="400"
+                BackgroundColor="White"/>
+            
             <!-- ListView to display the history of expressions -->
             <Label Text="History of Expressions:" FontSize="20"/>
-            <ListView ItemsSource="{Binding ExpressionHistory}"
-                      SelectionMode="Single"
-                      SelectedItem="{Binding SelectedHistoryItem, Mode=TwoWay}">
+            <ListView
+                ItemsSource="{Binding ExpressionHistory}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedHistoryItem, Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:ExpressionHistory">
                         <TextCell Text="{Binding Expression}" Detail="{Binding Solution}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <!-- Display details of the selected history item -->
+            <Label Text="Selected History Item Details:" FontSize="20"/>
+            <Label Text="Operation:" FontSize="16"/>
+            <Label Text="{Binding SelectedHistoryItem.OperationName}" FontSize="16"/>
+            <Label Text="Expression:" FontSize="16"/>
+            <Label Text="{Binding SelectedHistoryItem.Expression}" FontSize="16"/>
+            <Label Text="Solution:" FontSize="16"/>
+            <Label Text="{Binding SelectedHistoryItem.Solution}" FontSize="16"/>
+            <Label Text="Timestamp:" FontSize="16"/>
+            <Label Text="{Binding SelectedHistoryItem.Timestamp}" FontSize="16"/>
         </VerticalStackLayout>
     </ScrollView>
 
