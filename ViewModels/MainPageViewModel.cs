@@ -15,14 +15,11 @@ public partial class MainPageViewModel : ObservableObject
     public string? Expression { get; set; }
 
     private readonly SolutionService _solutionService;
+    private readonly DatabaseService _databaseService;
 
     public ObservableCollection<Operation> Operations { get; } = new ObservableCollection<Operation>(Models.Operations.GetAllOperations());
 
-    [ObservableProperty]
-    private bool _isDeriveChecked = true;
-
-    [ObservableProperty]
-    private bool _isIntegrateChecked;
+    public ObservableCollection<ExpressionHistory> ExpressionHistory { get; } = new ObservableCollection<ExpressionHistory>();
 
     [ObservableProperty]
     private bool _isSecondExtraFieldVisible;
@@ -35,43 +32,21 @@ public partial class MainPageViewModel : ObservableObject
 
     // The LaTeX expression bound to the UI
     [ObservableProperty]
-    private string latexExpression;
+    private string _latexExpression;
 
-    public MainPageViewModel(SolutionService solutionService)
+    public MainPageViewModel(SolutionService solutionService, DatabaseService databaseService)
     {
         _solutionService = solutionService;
+        _databaseService = databaseService;
         _selectedOperation = Operations.First(); // Default to the first operation
         LatexExpression = @"\sum_{i=1}^{n} i = \frac{n(n+1)}{2}";
+        LoadExpressionHistory();
     }
 
-    // Generates the WebView HTML content dynamically
-    public string GetHtmlContent()
-    {
-        return $@"
-            <html>
-            <head>
-                <script type='text/javascript' async src='https://polyfill.io/v3/polyfill.min.js?features=es6'></script>
-                <script type='text/javascript' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
-            </head>
-            <body>
-                <h2>Math Expression:</h2>
-                <p>\({LatexExpression}\)</p>
-                <script>
-                    MathJax.typeset();
-                </script>
-            </body>
-            </html>";
-    }
     partial void OnSelectedOperationChanged(Operation value)
     {
         UpdateFirstExtraFieldVisible();
         UpdateSecondExtraFieldVisible();
-
-    }
-
-    private void UpdateSecondExtraFieldVisible()
-    {
-        IsSecondExtraFieldVisible = SelectedOperation.Name == "Area Under Curve";
     }
 
     private void UpdateFirstExtraFieldVisible()
@@ -79,10 +54,33 @@ public partial class MainPageViewModel : ObservableObject
         IsFirstExtraFieldVisible = SelectedOperation.Name == "Find Tangent" || SelectedOperation.Name == "Area Under Curve";
     }
 
+    private void UpdateSecondExtraFieldVisible()
+    {
+        IsSecondExtraFieldVisible = SelectedOperation.Name == "Area Under Curve";
+    }
+
     [RelayCommand]
     private async Task NewtonClicked()
     {
         Solution = await GetSolutionAsync(SelectedOperation.Endpoint);
+        var history = new ExpressionHistory
+        {
+            Timestamp = DateTime.Now,
+            OperationName = SelectedOperation.Name,
+            Expression = Expression,
+            Solution = Solution
+        };
+        await _databaseService.AddExpressionHistoryAsync(history);
+        ExpressionHistory.Add(history);
+    }
+
+    private async void LoadExpressionHistory()
+    {
+        var histories = await _databaseService.GetExpressionHistoryAsync();
+        foreach (var history in histories)
+        {
+            ExpressionHistory.Add(history);
+        }
     }
 
     public async Task<string> GetSolutionAsync(string operation)

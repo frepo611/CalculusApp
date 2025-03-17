@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CalculusApp.MainPage"
              xmlns:viewModels="clr-namespace:CalculusApp.ViewModels"
+             xmlns:models="clr-namespace:CalculusApp.Models"
              x:DataType="viewModels:MainPageViewModel">
 
     <ScrollView>
@@ -50,7 +51,7 @@
             </Button>
             <Label Text="Enter a LaTeX Expression:" FontSize="20"/>
 
-            <Entry Text="{Binding LatexExpression, Mode=TwoWay}"
+            <Entry Text="{Binding LatexExpression}"
                Placeholder="e.g., E = mc^2" />
 
             <WebView x:Name="MathWebView"
@@ -58,6 +59,17 @@
                  HeightRequest="200"
                  WidthRequest="400"
                  BackgroundColor="White"/>
+            <!-- ListView to display the history of expressions -->
+            <Label Text="History of Expressions:" FontSize="20"/>
+            <ListView ItemsSource="{Binding ExpressionHistory}"
+                      SelectionMode="Single"
+                      SelectedItem="{Binding SelectedHistoryItem, Mode=TwoWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ExpressionHistory">
+                        <TextCell Text="{Binding Expression}" Detail="{Binding Solution}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </VerticalStackLayout>
     </ScrollView>
 
