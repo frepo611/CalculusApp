@@ -33,19 +33,18 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     private string _latexExpression;
 
+    [ObservableProperty]
     private ExpressionHistory _selectedHistoryItem;
-    public ExpressionHistory SelectedHistoryItem
+
+    partial void OnSelectedHistoryItemChanged(ExpressionHistory value)
     {
-        get => _selectedHistoryItem;
-        set
+        if (value != null)
         {
-            SetProperty(ref _selectedHistoryItem, value);
-            if (value != null)
-            {
-                SelectedOperation = Operations.FirstOrDefault(op => op.Name == value.OperationName);
-                Expression = value.Expression;
-                Solution = value.Solution;
-            }
+            SelectedOperation = Operations.FirstOrDefault(op => op.Name == value.OperationName);
+            Expression = value.Expression;
+            Solution = value.Solution;
+            FirstExtraParameter = value.FirstExtraParameter;
+            SecondExtraParameter = value.SecondExtraParameter;
         }
     }
 
@@ -77,18 +76,20 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     private async Task NewtonClicked()
     {
-        var calculusTaskFactory = new Models.CalculusTaskFactory();
+        var calculusTaskFactory = new CalculusTaskFactory();
         ICalculusTask calculusTask = calculusTaskFactory.CreateCalculusTask(SelectedOperation, Expression, FirstExtraParameter, SecondExtraParameter);
         Solution = await GetSolutionAsync(calculusTask);
-        
         
         var history = new ExpressionHistory
         {
             Timestamp = DateTime.Now,
             OperationName = SelectedOperation.Name,
             Expression = Expression,
+            FirstExtraParameter = FirstExtraParameter,
+            SecondExtraParameter = SecondExtraParameter,
             Solution = Solution
         };
+
         await _databaseService.AddExpressionHistoryAsync(history);
         ExpressionHistory.Add(history);
         SelectedHistoryItem = history;
@@ -107,5 +108,4 @@ public partial class MainPageViewModel : ObservableObject
     {
         return await _solutionService.GetSolutionAsync(calculusTask);
     }
-
 }
