@@ -32,15 +32,15 @@
             </Entry>
             <Entry
                 Placeholder="First field"
-                Text="{Binding FirstExtraField}"
+                Text="{Binding FirstExtraParameter}"
                 ClearButtonVisibility="WhileEditing"
-                IsVisible="{Binding IsFirstExtraFieldVisible}">
+                IsVisible="{Binding IsFirstExtraParameterVisible}">
             </Entry>
             <Entry
                 Placeholder="Second field"
-                Text="{Binding SecondExtraField}"
+                Text="{Binding SecondExtraParameter}"
                 ClearButtonVisibility="WhileEditing"
-                IsVisible="{Binding IsSecondExtraFieldVisible}">
+                IsVisible="{Binding IsSecondExtraParameterVisible}">
             </Entry>
             <Label
                 x:Name="FirstResult"

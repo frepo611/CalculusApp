@@ -10,8 +10,8 @@ public partial class MainPageViewModel : ObservableObject
 {
     [ObservableProperty]
     private string _solution = "";
-    public string? FirstExtraField { get; set; }
-    public string? SecondExtraField { get; set; }
+    public string? FirstExtraParameter { get; set; }
+    public string? SecondExtraParameter { get; set; }
     public string? Expression { get; set; }
 
     private readonly SolutionService _solutionService;
@@ -22,10 +22,10 @@ public partial class MainPageViewModel : ObservableObject
     public ObservableCollection<ExpressionHistory> ExpressionHistory { get; } = new ObservableCollection<ExpressionHistory>();
 
     [ObservableProperty]
-    private bool _isSecondExtraFieldVisible;
+    private bool _isSecondExtraParameterVisible;
 
     [ObservableProperty]
-    private bool _isFirstExtraFieldVisible;
+    private bool _isFirstExtraParameterVisible;
 
     [ObservableProperty]
     private Operation _selectedOperation;
@@ -67,19 +67,19 @@ public partial class MainPageViewModel : ObservableObject
 
     private void UpdateFirstExtraFieldVisible()
     {
-        IsFirstExtraFieldVisible = SelectedOperation.Name == "Find Tangent" || SelectedOperation.Name == "Area Under Curve";
+        IsFirstExtraParameterVisible = SelectedOperation.Name == "Find Tangent" || SelectedOperation.Name == "Area Under Curve";
     }
 
     private void UpdateSecondExtraFieldVisible()
     {
-        IsSecondExtraFieldVisible = SelectedOperation.Name == "Area Under Curve";
+        IsSecondExtraParameterVisible = SelectedOperation.Name == "Area Under Curve";
     }
 
     [RelayCommand]
     private async Task NewtonClicked()
     {
         var calculusTaskFactory = new Models.CalculusTaskFactory();
-        ICalculusTask calculusTask = calculusTaskFactory.CreateCalculusTask(SelectedOperation, Expression);
+        ICalculusTask calculusTask = calculusTaskFactory.CreateCalculusTask(SelectedOperation, Expression, FirstExtraParameter, SecondExtraParameter);
         Solution = await GetSolutionAsync(calculusTask);
         
         
@@ -106,23 +106,7 @@ public partial class MainPageViewModel : ObservableObject
 
     public async Task<string> GetSolutionAsync(ICalculusTask calculusTask)
     {
-        string modifiedExpression = RebuildExpression(operation, Expression);
-        return await _solutionService.GetSolutionAsync(operation, modifiedExpression);
+        return await _solutionService.GetSolutionAsync(calculusTask);
     }
 
-    private string RebuildExpression(string operation, string expression)
-    {
-        switch (operation)
-        {
-            case "tangent":
-                // Modify the expression for Find Tangent operation
-                return $"{FirstExtraField}|{expression}";
-            case "area":
-                // Modify the expression for Area Under Curve operation
-                return $"{FirstExtraField}:{SecondExtraField}|{expression}";
-            default:
-                // Return the original expression for other operations
-                return expression;
-        }
-    }
 }
