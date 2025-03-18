@@ -16,47 +16,51 @@
                 ItemsSource="{Binding Operations}"
                 ItemDisplayBinding="{Binding Name}"
                 SelectedItem="{Binding SelectedOperation}" />
-            <Label
-                Text="Calculate!"
-                Style="{StaticResource Headline}">
-            </Label>
-            <Label
-                Text="Ledning: Be good!"
-                Style="{StaticResource SubHeadline}">
-            </Label>
-            <Entry
-                x:Name="FirstTextField"
-                Placeholder="Expression here"
-                Text="{Binding Expression}"
-                HorizontalOptions="Center">
-            </Entry>
-            <Entry
-                Placeholder="First field"
-                Text="{Binding FirstExtraParameter}"
-                ClearButtonVisibility="WhileEditing"
-                IsVisible="{Binding IsFirstExtraParameterVisible}">
-            </Entry>
-            <Entry
-                Placeholder="Second field"
-                Text="{Binding SecondExtraParameter}"
-                ClearButtonVisibility="WhileEditing"
-                IsVisible="{Binding IsSecondExtraParameterVisible}">
-            </Entry>
-            <Label
-                x:Name="FirstResult"
-                Text="{Binding Solution}">
-            </Label>
             <Button
                 x:Name="CounterBtn"
                 Text="{Binding SelectedOperation.Name}"
                 HorizontalOptions="Center"
                 Command="{Binding NewtonClickedCommand}">
             </Button>
-            <Label Text="Enter a LaTeX Expression:" FontSize="20"/>
-
-            <Entry
-                Text="{Binding LatexExpression}"
-                Placeholder="e.g., E = mc^2" />
+            <Label
+                Text="Calculate!"
+                Style="{StaticResource Headline}">
+            </Label>
+            <Grid
+                Padding="1"
+                RowSpacing="2"
+                ColumnSpacing="20"
+                ColumnDefinitions="2*,0.5*,0.5*,*">
+                <Entry
+                    Grid.Column="0"
+                    x:Name="FirstTextField"
+                    Placeholder="Expression here"
+                    Text="{Binding Expression}"
+                    HorizontalOptions="Fill"
+                    ClearButtonVisibility="WhileEditing">
+                </Entry>
+                <Entry
+                    Grid.Column="1"
+                    Placeholder="First parameter"
+                    Text="{Binding FirstExtraParameter}"
+                    ClearButtonVisibility="WhileEditing"
+                    IsVisible="{Binding IsFirstExtraParameterVisible}">
+                </Entry>
+                <Entry
+                    Grid.Column="2"
+                    Placeholder="Second parameter"
+                    Text="{Binding SecondExtraParameter}"
+                    ClearButtonVisibility="WhileEditing"
+                    IsVisible="{Binding IsSecondExtraParameterVisible}">
+                </Entry>
+                <Label
+                    Grid.Column="3"
+                    x:Name="FirstResult"
+                    VerticalTextAlignment="Center"
+                    Text="{Binding Solution}">
+                </Label>
+                
+            </Grid>
 
             <WebView
                 x:Name="MathWebView"
@@ -64,7 +68,7 @@
                 HeightRequest="200"
                 WidthRequest="400"
                 BackgroundColor="White"/>
-            
+
             <!-- ListView to display the history of expressions -->
             <Label Text="History of Expressions:" FontSize="20"/>
             <ListView
@@ -77,17 +81,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <!-- Display details of the selected history item -->
-            <Label Text="Selected History Item Details:" FontSize="20"/>
-            <Label Text="Operation:" FontSize="16"/>
-            <Label Text="{Binding SelectedHistoryItem.OperationName}" FontSize="16"/>
-            <Label Text="Expression:" FontSize="16"/>
-            <Label Text="{Binding SelectedHistoryItem.Expression}" FontSize="16"/>
-            <Label Text="Solution:" FontSize="16"/>
-            <Label Text="{Binding SelectedHistoryItem.Solution}" FontSize="16"/>
-            <Label Text="Timestamp:" FontSize="16"/>
-            <Label Text="{Binding SelectedHistoryItem.Timestamp}" FontSize="16"/>
         </VerticalStackLayout>
     </ScrollView>
 

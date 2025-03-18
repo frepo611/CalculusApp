@@ -51,6 +51,7 @@ public partial class MainPageViewModel : ObservableObject
             Solution = value.Solution;
             FirstExtraParameter = value.FirstExtraParameter;
             SecondExtraParameter = value.SecondExtraParameter;
+            UpdateLatexExpression();
         }
     }
 
@@ -59,7 +60,7 @@ public partial class MainPageViewModel : ObservableObject
         _solutionService = solutionService;
         _databaseService = databaseService;
         _selectedOperation = Operations.First(); // Default to the first operation
-        LatexExpression = @"\sum_{i=1}^{n} i = \frac{n(n+1)}{2}";
+        LatexExpression = "";
         LoadExpressionHistory();
     }
 
@@ -67,6 +68,8 @@ public partial class MainPageViewModel : ObservableObject
     {
         UpdateFirstExtraFieldVisible();
         UpdateSecondExtraFieldVisible();
+        Solution = ""; // Clear the solution when a new operation is selected
+        UpdateLatexExpression();
     }
 
     private void UpdateFirstExtraFieldVisible()
@@ -79,26 +82,77 @@ public partial class MainPageViewModel : ObservableObject
         IsSecondExtraParameterVisible = SelectedOperation.Name == "Area Under Curve";
     }
 
+    private void UpdateLatexExpression()
+    {
+        if (SelectedOperation != null && !string.IsNullOrEmpty(Expression))
+        {
+            LatexExpression = TransformToLatex(Expression, Solution, SelectedOperation.Name);
+        }
+    }
+
+    private string TransformToLatex(string expression, string result, string operation)
+    {
+        string transformedExpression = expression.Replace("(", "{").Replace(")", "}");
+        string transformedResult = TransformResultToLatex(result);
+        return operation.ToLower() switch
+        {
+            "derive" => $@"\frac{{d}}{{dx}}f({transformedExpression}) = {transformedResult}",
+            "integrate" => $@"\int {transformedExpression} \, dx = {transformedResult}",
+            "area under curve" => $@"\int_{{{FirstExtraParameter}}}^{{{SecondExtraParameter}}} {transformedExpression} \, dx = {transformedResult}",
+            "factor" => $@"\text{{Factor}}({transformedExpression}) = {transformedResult}",
+            "simplify" => $@"\text{{Simplify}}({transformedExpression}) = {transformedResult}",
+            _ => transformedExpression // Default case, return the transformed expression
+        };
+    }
+
+    private string TransformResultToLatex(string result)
+    {
+        // Replace "/" with "\frac{}{}" syntax
+        var parts = result.Split('/');
+        if (parts.Length == 2)
+        {
+            return $@"\frac{{{parts[0]}}}{{{parts[1]}}}";
+        }
+        return result;
+    }
+
     [RelayCommand]
     private async Task NewtonClicked()
     {
-        var calculusTaskFactory = new CalculusTaskFactory();
-        ICalculusTask calculusTask = calculusTaskFactory.CreateCalculusTask(SelectedOperation, Expression, FirstExtraParameter, SecondExtraParameter);
-        Solution = await GetSolutionAsync(calculusTask);
-        
-        var history = new ExpressionHistory
+        try
         {
-            Timestamp = DateTime.Now,
-            OperationName = SelectedOperation.Name,
-            Expression = Expression,
-            FirstExtraParameter = FirstExtraParameter,
-            SecondExtraParameter = SecondExtraParameter,
-            Solution = Solution
-        };
+            var calculusTaskFactory = new CalculusTaskFactory();
+            ICalculusTask calculusTask = calculusTaskFactory.CreateCalculusTask(SelectedOperation, Expression, FirstExtraParameter, SecondExtraParameter);
+            Solution = await GetSolutionAsync(calculusTask);
 
-        await _databaseService.AddExpressionHistoryAsync(history);
-        ExpressionHistory.Add(history);
-        SelectedHistoryItem = history;
+            var history = new ExpressionHistory
+            {
+                Timestamp = DateTime.Now,
+                OperationName = SelectedOperation.Name,
+                Expression = Expression,
+                FirstExtraParameter = FirstExtraParameter,
+                SecondExtraParameter = SecondExtraParameter,
+                Solution = Solution
+            };
+
+            await _databaseService.AddExpressionHistoryAsync(history);
+            ExpressionHistory.Add(history);
+            SelectedHistoryItem = history;
+            UpdateLatexExpression(); // Update LaTeX expression with the result
+        }
+        catch (Exception ex)
+        {
+            await Application.Current!.Windows[0].Page!.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+            ResetState();
+        }
+    }
+
+    private void ResetState()
+    {
+        Solution = "";
+        Expression = "";
+        FirstExtraParameter = "";
+        SecondExtraParameter = "";
     }
 
     private async void LoadExpressionHistory()

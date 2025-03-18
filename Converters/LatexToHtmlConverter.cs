@@ -17,7 +17,6 @@ public class LatexToHtmlConverter : IValueConverter
                         <script type='text/javascript' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
                     </head>
                     <body>
-                        <h2>Math Expression:</h2>
                         <p>\({latexExpression}\)</p>
                         <script>
                             MathJax.typeset();

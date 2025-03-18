@@ -34,10 +34,10 @@ public class SolutionService
             // Handle HTTP request specific exceptions
             throw new Exception("Error occurred while making the HTTP request.", httpRequestException);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle all other exceptions
-            throw new Exception("An error occurred while fetching the solution.", ex);
+            throw;
         }
     }
 }
