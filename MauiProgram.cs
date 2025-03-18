@@ -25,6 +25,7 @@ public static class MauiProgram
         builder.Services.AddTransient<MainPageViewModel>();
         builder.Services.AddSingleton<Services.SolutionService>();
         builder.Services.AddSingleton<Services.DatabaseService>();
+        
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -78,7 +78,11 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     private async Task NewtonClicked()
     {
-        Solution = await GetSolutionAsync(SelectedOperation.Endpoint);
+        var calculusTaskFactory = new Models.CalculusTaskFactory();
+        ICalculusTask calculusTask = calculusTaskFactory.CreateCalculusTask(SelectedOperation, Expression);
+        Solution = await GetSolutionAsync(calculusTask);
+        
+        
         var history = new ExpressionHistory
         {
             Timestamp = DateTime.Now,
@@ -100,7 +104,7 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 
-    public async Task<string> GetSolutionAsync(string operation)
+    public async Task<string> GetSolutionAsync(ICalculusTask calculusTask)
     {
         string modifiedExpression = RebuildExpression(operation, Expression);
         return await _solutionService.GetSolutionAsync(operation, modifiedExpression);

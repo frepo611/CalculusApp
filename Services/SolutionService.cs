@@ -10,27 +10,22 @@ public class SolutionService
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<string> GetSolutionAsync(string operation, string expression)
+    public async Task<string> GetSolutionAsync(ICalculusTask calculusTask)
     {
         try
         {
             var httpClient = _httpClientFactory.CreateClient();
             var baseUri = new Uri("https://newton.now.sh");
             httpClient.BaseAddress = baseUri;
-            var expressionUri = Uri.EscapeDataString(expression);
-            var response = await httpClient.GetAsync($"/api/v2/{operation}/{expressionUri}");
+            var parameterUri = Uri.EscapeDataString(calculusTask.Parameters);
+            var response = await httpClient.GetAsync($"/api/v2/{calculusTask.Operation}/{parameterUri}");
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"API request failed with status code: {response.StatusCode}");
             }
 
-            Solution responseSolution = await response.Content.ReadFromJsonAsync<Solution>();
-
-            if (responseSolution == null)
-            {
-                throw new Exception("No solution returned from the API.");
-            }
+            Solution responseSolution = await response.Content.ReadFromJsonAsync<Solution>() ?? throw new Exception("No solution returned from the API.");
 
             return responseSolution.Result;
         }
