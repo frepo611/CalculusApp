@@ -30,7 +30,6 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     private Operation _selectedOperation;
 
-    // The LaTeX expression bound to the UI
     [ObservableProperty]
     private string _latexExpression;
 
