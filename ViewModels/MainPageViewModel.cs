@@ -10,9 +10,15 @@ public partial class MainPageViewModel : ObservableObject
 {
     [ObservableProperty]
     private string _solution = "";
-    public string? FirstExtraParameter { get; set; }
-    public string? SecondExtraParameter { get; set; }
-    public string? Expression { get; set; }
+
+    [ObservableProperty]
+    public string? _firstExtraParameter;
+
+    [ObservableProperty]
+    public string? _secondExtraParameter;
+
+    [ObservableProperty]
+    public string? _expression;
 
     private readonly SolutionService _solutionService;
     private readonly DatabaseService _databaseService;
