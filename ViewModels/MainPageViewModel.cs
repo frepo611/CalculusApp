@@ -68,7 +68,7 @@ public partial class MainPageViewModel : ObservableObject
     {
         UpdateFirstExtraFieldVisible();
         UpdateSecondExtraFieldVisible();
-        Solution = ""; // Clear the solution when a new operation is selected
+        Solution = "";
         UpdateLatexExpression();
     }
 
@@ -101,7 +101,7 @@ public partial class MainPageViewModel : ObservableObject
             "area under curve" => $@"\int_{{{FirstExtraParameter}}}^{{{SecondExtraParameter}}} {transformedExpression} \, dx = {transformedResult}",
             "factor" => $@"\text{{Factor}}({transformedExpression}) = {transformedResult}",
             "simplify" => $@"\text{{Simplify}}({transformedExpression}) = {transformedResult}",
-            _ => transformedExpression // Default case, return the transformed expression
+            _ => transformedExpression
         };
     }
 
@@ -138,7 +138,7 @@ public partial class MainPageViewModel : ObservableObject
             await _databaseService.AddExpressionHistoryAsync(history);
             ExpressionHistory.Add(history);
             SelectedHistoryItem = history;
-            UpdateLatexExpression(); // Update LaTeX expression with the result
+            UpdateLatexExpression();
         }
         catch (Exception ex)
         {
