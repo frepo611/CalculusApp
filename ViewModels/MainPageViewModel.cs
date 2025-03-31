@@ -40,15 +40,15 @@ public partial class MainPageViewModel : ObservableObject
     private string _latexExpression;
 
     [ObservableProperty]
-    private ExpressionHistory _selectedHistoryItem;
+    private ExpressionHistory? _selectedHistoryItem;
 
     partial void OnSelectedHistoryItemChanged(ExpressionHistory value)
     {
         if (value != null)
         {
-            SelectedOperation = Operations.FirstOrDefault(op => op.Name == value.OperationName);
+            SelectedOperation = Operations.FirstOrDefault(op => op.Name == value.OperationName)!;
             Expression = value.Expression;
-            Solution = value.Solution;
+            Solution = value.Solution!;
             FirstExtraParameter = value.FirstExtraParameter;
             SecondExtraParameter = value.SecondExtraParameter;
             UpdateLatexExpression();
@@ -86,19 +86,30 @@ public partial class MainPageViewModel : ObservableObject
     {
         if (SelectedOperation != null && !string.IsNullOrEmpty(Expression))
         {
-            LatexExpression = TransformToLatex(Expression, Solution, SelectedOperation.Name);
+            LatexExpression = TransformToLatex(Expression, Solution, SelectedOperation.Name, GetTransformedExpression(Expression));
         }
     }
 
-    private string TransformToLatex(string expression, string result, string operation)
+    private string GetTransformedExpression(string expression)
     {
-        string transformedExpression = expression.Replace("(", "{").Replace(")", "}");
+        expression.Replace("(", "{").Replace(")", "}");
+
+        var parts = expression.Split(new string[] { "/", "(over)" }, StringSplitOptions.None);
+        if (parts.Length == 2)
+        {
+            expression = $@"\frac{{{parts[0]}}}{{{parts[1]}}}";
+        }
+        return expression;
+    }
+
+    private string TransformToLatex(string expression, string result, string operation, string transformedExpression)
+    {
         string transformedResult = TransformResultToLatex(result);
         return operation.ToLower() switch
         {
             "derive" => $@"\frac{{d}}{{dx}}f({transformedExpression}) = {transformedResult}",
-            "integrate" => $@"\int {transformedExpression} \, dx = {transformedResult}",
-            "area under curve" => $@"\int_{{{FirstExtraParameter}}}^{{{SecondExtraParameter}}} {transformedExpression} \, dx = {transformedResult}",
+            "integrate" => $@"\int \mathrm{{{transformedExpression}}} \, \mathrm{{d}}x = {transformedResult}",
+            "area under curve" => $@"\int_{{{FirstExtraParameter}}}^{{{SecondExtraParameter}}} {transformedExpression} \, \mathrm{{d}}x = {transformedResult}",
             "factor" => $@"\text{{Factor}}({transformedExpression}) = {transformedResult}",
             "simplify" => $@"\text{{Simplify}}({transformedExpression}) = {transformedResult}",
             _ => transformedExpression
@@ -112,7 +123,7 @@ public partial class MainPageViewModel : ObservableObject
         if (parts.Length == 2)
         {
             return $@"\frac{{{parts[0]}}}{{{parts[1]}}}";
-        }
+        } 
         return result;
     }
 
@@ -121,8 +132,8 @@ public partial class MainPageViewModel : ObservableObject
     {
         try
         {
-            var calculusTaskFactory = new CalculusTaskFactory();
-            ICalculusTask calculusTask = calculusTaskFactory.CreateCalculusTask(SelectedOperation, Expression, FirstExtraParameter, SecondExtraParameter);
+            var taskGenerator = TaskGeneratorFactory.CreateTaskGenerator(SelectedOperation);
+            var calculusTask = taskGenerator.GenerateTask(Expression, FirstExtraParameter, SecondExtraParameter);
             Solution = await GetSolutionAsync(calculusTask);
 
             var history = new ExpressionHistory
@@ -164,7 +175,7 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 
-    public async Task<string> GetSolutionAsync(ICalculusTask calculusTask)
+    public async Task<string> GetSolutionAsync(Models.CalculusTask calculusTask)
     {
         return await _solutionService.GetSolutionAsync(calculusTask);
     }

@@ -10,7 +10,7 @@ public class SolutionService
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<string> GetSolutionAsync(ICalculusTask calculusTask)
+    public async Task<string> GetSolutionAsync(Models.CalculusTask calculusTask)
     {
         try
         {

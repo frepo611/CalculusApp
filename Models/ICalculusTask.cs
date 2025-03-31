@@ -1,8 +1,8 @@
 ﻿namespace CalculusApp.Models
 {
-    public interface ICalculusTask
+    public class CalculusTask
     {
-        string Operation { get; }
-        string Parameters { get; }
+        public required string Operation { get; init; }
+        public required string Parameters { get; init;  }
     }
 }
