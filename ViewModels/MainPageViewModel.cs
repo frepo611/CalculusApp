@@ -147,7 +147,7 @@ public partial class MainPageViewModel : ObservableObject
             };
 
             await _databaseService.AddExpressionHistoryAsync(history);
-            ExpressionHistory.Add(history);
+            ExpressionHistory.Insert(0, history); // add the most recent expression to the start of the list
             SelectedHistoryItem = history;
             UpdateLatexExpression();
         }
