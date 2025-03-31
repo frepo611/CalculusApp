@@ -14,7 +14,9 @@ public class DatabaseService
     }
     public async Task<List<ExpressionHistory>> GetExpressionHistoryAsync()
     {
-        return await _context.ExpressionHistory.ToListAsync();
+        return await _context.ExpressionHistory.OrderByDescending(entry => entry.Timestamp)
+            .ToListAsync();
+            
     }
     public async Task AddExpressionHistoryAsync(ExpressionHistory history)
     {
