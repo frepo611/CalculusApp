@@ -1,5 +1,7 @@
 # CalculusApp
 
+<img src="https://github.com/user-attachments/assets/56ab1f2c-95b5-4e3f-8d52-69200fe8d883" width="400" />
+
 ## Description
 CalculusApp is a .NET MAUI application developed as a learning assignment to explore and apply APIs, LaTeX rendering, and MAUI development. This project demonstrates how to integrate modern libraries and frameworks for mathematical rendering.
 
